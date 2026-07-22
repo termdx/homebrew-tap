@@ -1,28 +1,30 @@
 class Codrop < Formula
   desc "Codrop live-sync daemon: watch a folder and sync changes to peers over iroh."
   homepage "https://github.com/termdx/Codrop"
-  version "0.1.1"
+  version "0.1.2"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/termdx/Codrop/releases/download/v0.1.1/codrop-aarch64-apple-darwin.tar.xz"
-      sha256 "ee4d622dea214c2db5a1cd91140886a89a06f7a96e7d68b98913d7e26e6f54aa"
+      url "https://github.com/termdx/Codrop/releases/download/v0.1.2/codrop-aarch64-apple-darwin.tar.xz"
+      sha256 "62a4a5f61716f1ca456514bfdc1b302d0128c43f4ea3fcdde548729412a9523c"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/termdx/Codrop/releases/download/v0.1.1/codrop-x86_64-apple-darwin.tar.xz"
-      sha256 "ad8c31b1ff5f54b517c405901fce0524483bbcdf671c57e56b13c2f53a446e44"
+      url "https://github.com/termdx/Codrop/releases/download/v0.1.2/codrop-x86_64-apple-darwin.tar.xz"
+      sha256 "c6cbac7cb096fe3af12ce9b7b7fc7edc2f5dfbb5766980e0f2160346df04402f"
     end
   end
-  if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/termdx/Codrop/releases/download/v0.1.1/codrop-x86_64-unknown-linux-gnu.tar.xz"
-    sha256 "2d62b9b4419de373e49e47cb8ebf5bbd82b665b62acd1f384ef73c47e6dd2799"
+  if OS.linux?
+    if Hardware::CPU.intel?
+      url "https://github.com/termdx/Codrop/releases/download/v0.1.2/codrop-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "6b5961b271bbf25add6b1edf049f5604226175a425498211cd38ad59deb6fb97"
+    end
   end
   license "MIT"
 
   BINARY_ALIASES = {
-    "aarch64-apple-darwin":     {},
-    "x86_64-apple-darwin":      {},
-    "x86_64-unknown-linux-gnu": {},
-  }.freeze
+    "aarch64-apple-darwin": {},
+    "x86_64-apple-darwin": {},
+    "x86_64-unknown-linux-gnu": {}
+  }
 
   def target_triple
     cpu = Hardware::CPU.arm? ? "aarch64" : "x86_64"
@@ -40,9 +42,15 @@ class Codrop < Formula
   end
 
   def install
-    bin.install "codrop" if OS.mac? && Hardware::CPU.arm?
-    bin.install "codrop" if OS.mac? && Hardware::CPU.intel?
-    bin.install "codrop" if OS.linux? && Hardware::CPU.intel?
+    if OS.mac? && Hardware::CPU.arm?
+      bin.install "codrop"
+    end
+    if OS.mac? && Hardware::CPU.intel?
+      bin.install "codrop"
+    end
+    if OS.linux? && Hardware::CPU.intel?
+      bin.install "codrop"
+    end
 
     install_binary_aliases!
 
